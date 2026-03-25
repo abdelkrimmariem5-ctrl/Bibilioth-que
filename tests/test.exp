@@ -1,0 +1,95 @@
+#!/usr/bin/expect -f
+# Test automatique de la bibliothèque numérique
+# Usage : expect tests/test.exp
+
+set timeout 5
+expect_after timeout { send_user "\n[ECHEC] Timeout atteint !\n"; exit 1 }
+
+# Nettoyer les fichiers de test précédents
+exec rm -f library.db app.conf bibliotheque.html
+
+send_user "\n=== DEBUT DES TESTS ===\n\n"
+
+# ── Test 1 : Création d'une nouvelle bibliothèque ────────────────────
+send_user "Test 1 : Creation d'une nouvelle bibliotheque\n"
+spawn ./main
+
+expect "Titre de la bibliothèque :"
+send "Ma Bibliothèque Test\r"
+
+expect "Description"
+send "Une bibliothèque de test\r"
+send "\r"
+
+expect "Appuyez sur Entrée"
+send "\r"
+
+# ── Test 2 : Importer des livres CSV ────────────────────────────────
+send_user "Test 2 : Import CSV\n"
+
+expect ">"
+send "2\r"
+
+expect "1."
+send "2\r"
+
+expect "CSV"
+send "tests/livres_test.csv\r"
+
+expect "importé"
+send "\r"
+
+expect ">"
+send "0\r"
+
+# ── Test 3 : Consulter les références ───────────────────────────────
+send_user "Test 3 : Consultation\n"
+
+expect ">"
+send "1\r"
+
+expect "Liste"
+send "1\r"
+
+expect "DÉTAIL"
+send "\r"
+
+# ── Test 4 : Recherche par titre ─────────────────────────────────────
+send_user "Test 4 : Recherche par titre\n"
+
+expect ">"
+send "3\r"
+
+expect "1."
+send "3\r"
+
+expect "Titre"
+send "petit\r"
+
+expect "Liste"
+send "1\r"
+
+expect "DÉTAIL"
+send "\r"
+
+expect ">"
+send "0\r"
+
+# ── Test 5 : Export HTML ─────────────────────────────────────────────
+send_user "Test 5 : Export HTML\n"
+
+expect ">"
+send "4\r"
+
+expect "Export HTML"
+send "\r"
+
+# ── Test 6 : Quitter ─────────────────────────────────────────────────
+send_user "Test 6 : Quitter\n"
+
+expect ">"
+send "6\r"
+
+expect eof
+
+send_user "\n=== TOUS LES TESTS PASSES ===\n"

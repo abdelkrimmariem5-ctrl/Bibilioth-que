@@ -1,0 +1,11 @@
+# Compiled object files
+*.o
+
+# Executable
+main
+
+# Database file
+*.db
+
+# VS Code workspace file
+*.code-workspace
